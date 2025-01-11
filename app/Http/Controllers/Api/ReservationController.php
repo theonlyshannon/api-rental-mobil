@@ -18,10 +18,12 @@ class ReservationController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Reservation::query();
+            $query = Reservation::with(['user', 'car']);
 
             if ($request->has('search')) {
-                $query->where('name', 'like', '%' . $request->search . '%');
+                $query->whereHas('user', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->search . '%');
+                });
             }
 
             $reservations = $query->get();
@@ -41,12 +43,17 @@ class ReservationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage with image upload.
      */
     public function store(ReservationStoreRequest $request)
     {
         try {
             $data = $request->validated();
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('reservations', 'public');
+                $data['image'] = $imagePath;
+            }
 
             $reservation = Reservation::create($data);
 
@@ -159,6 +166,37 @@ class ReservationController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Reservation failed to delete',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function approve(Request $request, $id)
+    {
+        try {
+            $reservation = Reservation::find($id);
+
+            if (!$reservation) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Reservation not found',
+                ], 404);
+            }
+
+            $reservation->update([
+                'status' => 'on_the_road',
+                'payment_status' => 'success',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservation approved successfully',
+                'data' => new ReservationResource($reservation->refresh()),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to approve reservation',
                 'error' => $e->getMessage(),
             ], 500);
         }

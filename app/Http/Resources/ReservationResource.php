@@ -16,16 +16,20 @@ class ReservationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'car_id' => $this->car_id,
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ],
+            'car' => [
+                'id' => $this->car->id,
+                'name' => $this->car->name,
+                'brand_name' => $this->car->brand_name,
+            ],
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'proof_of_payment' => $this->proof_of_payment,
             'payment_status' => $this->payment_status,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at
         ];
     }
 }
