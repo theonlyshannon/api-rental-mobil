@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
 
         if ($env === 'local') {
             $this->call([
+                RoleSeeder::class,
                 UserSeeder::class,
                 CarSeeder::class,
                 ReservationSeeder::class,

@@ -41,7 +41,6 @@ class CarStoreRequest extends FormRequest
             'max' => ':attribute maksimal :max karakter',
             'image' => ':attribute harus berupa gambar',
             'mimes' => ':attribute harus berupa gambar dengan format: :values',
-            'max' => ':attribute maksimal :max KB',
             'numeric' => ':attribute harus berupa angka',
             'integer' => ':attribute harus berupa angka bulat'
         ];
