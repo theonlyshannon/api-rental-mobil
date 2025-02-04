@@ -17,7 +17,7 @@ class CarResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
             'brand_name' => $this->brand_name,
             'price_per_day' => $this->price_per_day,
             'stock' => $this->stock,

@@ -20,9 +20,10 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('proof_of_payment');
+
             $table->enum('payment_status', ['pending', 'waiting', 'success'])->default('pending');
             $table->enum('status', ['pending', 'on_the_road', 'completed'])->default('pending');
-            
+
             $table->softDeletes();
             $table->timestamps();
         });

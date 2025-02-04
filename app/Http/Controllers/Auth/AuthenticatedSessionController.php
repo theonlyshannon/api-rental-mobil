@@ -21,7 +21,7 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        $redirectTo = $user->hasRole('admin') ? '/admin/dashboard' : '/user/dashboard';
+        $redirectTo = $user->hasRole('admin') ? '/dashboard' : '/';
 
         return response()->json([
             'message' => 'Login successful',
